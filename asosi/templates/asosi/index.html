@@ -1,0 +1,28 @@
+<!-- asosi/templates/asosi/index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+
+    <!-- Подключаем Bootstrap (CSS) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Подключаем jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Подключаем Bootstrap (JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    {% include 'asosi/header.html' %}
+
+    <div class="container mt-4">
+        <h2>Добро пожаловать на наш сайт!</h2>
+        <p>Здесь будут отображаться товары и категории.</p>
+    </div>
+
+    {% include 'asosi/footer.html' %}
+</body>
+</html>

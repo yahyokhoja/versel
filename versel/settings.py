@@ -20,7 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'asosi',  # ваше приложение
 ]
 
 # Middleware
@@ -41,17 +41,22 @@ ROOT_URLCONF = 'versel.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # или другой путь, если у вас общая папка для шаблонов
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                  # добавляем кастомный контекст-процессор
+                'asosi.context_processors.menu_categories',
+
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'versel.wsgi.application'
 
@@ -85,4 +90,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Ключ по умолчанию
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = ['*']
+DEBUG = True
+# Настройки для работы с PostgreSQL
+
+
 
