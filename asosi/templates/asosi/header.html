@@ -1,4 +1,4 @@
-<!-- asosi/templates/asosi/header.html -->
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -26,30 +26,38 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarMegaMenu">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                             <li class="nav-item">
                                 <a class="nav-link" href="/">Главная</a>
                             </li>
 
-                            <!-- Мега-меню с категориями и подкатегориями -->
+                            <!-- Мега-меню с магазинами, категориями и подкатегориями -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="storesDropdown" role="button" data-bs-toggle="dropdown">
                                     Магазины
                                 </a>
-                                <ul class="dropdown-menu p-3" aria-labelledby="categoriesDropdown" style="min-width: 300px;">
-                                    {% for category in menu_categories %}
+                                <ul class="dropdown-menu p-3" aria-labelledby="storesDropdown" style="min-width: 300px;">
+                                    {% for store in menu_categories %}
                                         <li class="mb-2">
-                                            <strong>{{ category.name }}</strong>
+                                            <strong>{{ store.name }}</strong>
                                             <ul class="list-unstyled ps-3">
-                                                {% for subcategory in category.subcategories.all %}
-                                                    <li><a class="dropdown-item" href="#">{{ subcategory.name }}</a></li>
+                                                {% for category in store.categories.all %}
+                                                    <li>
+                                                        <strong>{{ category.name }}</strong>
+                                                        <ul class="list-unstyled ps-3">
+                                                            {% for subcategory in category.subcategories.all %}
+                                                                <li><a class="dropdown-item" href="#">{{ subcategory.name }}</a></li>
+                                                            {% empty %}
+                                                                <li class="text-muted small">Нет подкатегорий</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </li>
                                                 {% empty %}
-                                                    <li class="text-muted small">Нет подкатегорий</li>
+                                                    <li class="text-muted small">Нет категорий</li>
                                                 {% endfor %}
                                             </ul>
                                         </li>
                                     {% empty %}
-                                        <li class="text-muted small">Нет категорий</li>
+                                        <li class="text-muted small">Нет магазинов</li>
                                     {% endfor %}
                                 </ul>
                             </li>

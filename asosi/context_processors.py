@@ -1,5 +1,5 @@
-from .models import Category
+from .models import Store
 
 def menu_categories(request):
-    categories = Category.objects.prefetch_related('subcategories')
-    return {'menu_categories': categories}
+    stores = Store.objects.prefetch_related('categories__subcategories').all()
+    return {'menu_categories': stores}

@@ -21,6 +21,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'asosi',  # ваше приложение
+    'user',
+    'order',
 ]
 
 # Middleware
@@ -93,5 +95,6 @@ ALLOWED_HOSTS = ['*']
 DEBUG = True
 # Настройки для работы с PostgreSQL
 
+AUTH_USER_MODEL = 'user.User'
 
 

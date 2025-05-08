@@ -1,14 +1,21 @@
+from django.shortcuts import render, get_object_or_404
+from .models import Category, Product, SubCategory, Store
 
-
-from django.shortcuts import render
-from django.shortcuts import render
-from .models import Category, Product, SubCategory
-
+# Главная страница
 def index(request):
-    return render(request, 'asosi/index.html')
+    stores = Store.objects.prefetch_related('categories__subcategories').all()
+    return render(request, 'asosi/index.html', {'stores': stores})
 
+# Страница с продуктами по подкатегории
 def products_by_subcategory(request, subcategory_id):
-    products = Product.objects.filter(subcategory_id=subcategory_id)
-    return render(request, 'asosi/products_list.html', {'products': products})
+    # Получаем подкатегорию по id
+    subcategory = get_object_or_404(SubCategory, id=subcategory_id)
 
+    # Получаем все продукты этой подкатегории
+    products = Product.objects.filter(subcategory=subcategory)
 
+    # Отображаем продукты на странице
+    return render(request, 'asosi/products_list.html', {
+        'subcategory': subcategory,
+        'products': products
+    })
