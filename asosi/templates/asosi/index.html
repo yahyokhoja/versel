@@ -19,7 +19,7 @@
 
     <div class="container mt-4">
         <h2>Добро пожаловать на наш сайт!</h2>
-        <p>Здесь вы можете найти магазины, категории и продукты.</p>
+        <p>Здесь вы можете найти магазины и продукты.</p>
 
         <h3>Магазины</h3>
         <div class="row">
@@ -29,37 +29,10 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ store.name }}</h5>
                             <p class="card-text">{{ store.description }}</p>
-                            <h5>Категории:</h5>
                             
-                            <!-- Выпадающий список для категорий -->
-                            <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Выберите категорию
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    {% for category in store.categories.all %}
-                                        <li>
-                                            <a class="dropdown-item" href="#">
-                                                <strong>{{ category.name }}</strong>
-                                                <ul>
-                                                    {% for subcategory in category.subcategories.all %}
-                                                        <li>
-                                                            <a class="dropdown-item" href="{% url 'products_by_subcategory' subcategory.id %}">{{ subcategory.name }}</a>
-                                                        </li>
-                                                    {% empty %}
-                                                        <li>Подкатегории отсутствуют</li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </a>
-                                        </li>
-                                    {% empty %}
-                                        <li>Категории отсутствуют</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
+                            <!-- Кнопка для перехода в магазин -->
+                            <a href="{% url 'store_detail' store.id %}" class="btn btn-primary mt-3">Войти в магазин</a>
 
-                            <!-- Кнопка "Купить" -->
-                            <a href="#" class="btn btn-success mt-3">Купить</a>
                         </div>
                     </div>
                 </div>

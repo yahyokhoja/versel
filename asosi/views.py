@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product, SubCategory, Store
 
@@ -8,14 +9,11 @@ def index(request):
 
 # Страница с продуктами по подкатегории
 def products_by_subcategory(request, subcategory_id):
-    # Получаем подкатегорию по id
     subcategory = get_object_or_404(SubCategory, id=subcategory_id)
-
-    # Получаем все продукты этой подкатегории
     products = Product.objects.filter(subcategory=subcategory)
+    return render(request, 'asosi/products_list.html', {'subcategory': subcategory, 'products': products})
 
-    # Отображаем продукты на странице
-    return render(request, 'asosi/products_list.html', {
-        'subcategory': subcategory,
-        'products': products
-    })
+# Страница детального магазина
+def store_detail(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+    return render(request, 'asosi/store_detail.html', {'store': store})
