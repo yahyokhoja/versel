@@ -1,12 +1,18 @@
-{% include 'app/header.html' %}
+{%include 'app/header.html' %}
+
+
+{% block title %}Вход{% endblock %}
 
 
 
 {% block content %}
 <div class="container mt-5">
   <h2>Вход</h2>
-  <form method="post">
+  <form method="post" novalidate>
     {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.email.errors }}
+    {{ form.password.errors }}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Войти</button>
   </form>

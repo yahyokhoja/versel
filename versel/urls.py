@@ -24,7 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.urls')),  # <-- подключаем приложение app
     path('user/', include('user.urls')),  # Чтобы открыть регистрацию по адресу /user/register/
-    
    
     
 ]
