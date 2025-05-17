@@ -20,7 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'asosi',  # ваше приложение
+    'app',  # ваше приложение
     'user',
     'order',
 ]
@@ -52,7 +52,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                   # добавляем кастомный контекст-процессор
-                'asosi.context_processors.menu_categories',
+                'app.context_processors.menu_categories',
 
             ],
         },
@@ -95,6 +95,11 @@ ALLOWED_HOSTS = ['*']
 DEBUG = True
 # Настройки для работы с PostgreSQL
 
-AUTH_USER_MODEL = 'user.User'
 
 
+# settings.py
+AUTH_USER_MODEL = 'user.CustomUser'
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = '/'

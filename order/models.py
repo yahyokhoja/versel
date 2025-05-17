@@ -3,7 +3,11 @@
 # Create your models here.
 from django.db import models
 from django.conf import settings
-from user.models import Store
+from django.apps import apps
+from app.models import Store
+
+
+
 
 class Order(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='orders')
