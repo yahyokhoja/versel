@@ -25,5 +25,5 @@ urlpatterns = [
     path('', include('app.urls')),  # <-- подключаем приложение app
     path('user/', include('user.urls')),  # Чтобы открыть регистрацию по адресу /user/register/
    
-    
+    path('store/', include('store.urls')),
 ]

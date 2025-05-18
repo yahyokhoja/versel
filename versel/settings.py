@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'app',  # ваше приложение
     'user',
     'order',
+    'store',
 ]
 
 # Middleware
@@ -103,3 +104,4 @@ AUTH_USER_MODEL = 'user.CustomUser'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'profile'
 LOGOUT_REDIRECT_URL = '/'
+CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://127.0.0.1']
