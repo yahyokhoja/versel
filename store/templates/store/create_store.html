@@ -1,0 +1,18 @@
+<!-- store/templates/store/create_store.html -->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать магазин</title>
+</head>
+<body>
+    <h1>Создание магазина</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Создать</button>
+    </form>
+</body>
+</html>

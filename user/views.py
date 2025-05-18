@@ -27,9 +27,11 @@ def register_view(request):
     return render(request, 'user/register.html', {'form': form})
 
 
+
 @login_required
 def profile_view(request):
-    return render(request, 'user/profile.html')
+    store = getattr(request.user, 'store', None)  # Получаем магазин, если есть
+    return render(request, 'user/profile.html', {'store': store})
 
 
 def logout_view(request):
