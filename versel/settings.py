@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',  # ваше приложение
-    'user',
+    'users',
     'order',
     'store',
 ]
@@ -80,7 +80,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Локализация
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
@@ -99,7 +99,7 @@ DEBUG = True
 
 
 # settings.py
-AUTH_USER_MODEL = 'user.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'profile'

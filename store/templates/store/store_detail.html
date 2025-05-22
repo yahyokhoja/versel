@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Магазин: {{ store.name }}</h2>
+  <p>{{ store.description }}</p>
+  <p>Владелец: {{ store.owner }}</p>
+
+  <h3>Товары</h3>
+  <ul>
+    {% for product in store.products.all %}
+      <li>{{ product.name }} - {{ product.price }} </li>
+    {% empty %}
+      <li>Нет товаров в магазине.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

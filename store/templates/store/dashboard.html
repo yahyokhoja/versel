@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Личный кабинет магазина</h1>
+
+<h2>Информация о магазине</h2>
+<p><strong>Название:</strong> {{ store.name }}</p>
+<p><strong>Описание:</strong> {{ store.description }}</p>
+
+<a href="{% url 'edit_store' store.id %}">Редактировать магазин</a>
+
+<hr>
+
+<h2>Ваши товары</h2>
+{% if products %}
+    <ul>
+        {% for product in products %}
+            <li>
+                {{ product.name }} — {{ product.price }}₽
+                <a href="{% url 'edit_product' product.id %}">✏️</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Товаров пока нет. <a href="{% url 'add_product' %}">Добавить товар</a></p>
+{% endif %}
+
+{% endblock %}

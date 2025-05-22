@@ -4,7 +4,8 @@
 from django.db import models
 from django.conf import settings
 from django.apps import apps
-from app.models import Store
+from store.models import Store
+
 
 
 

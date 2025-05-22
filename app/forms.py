@@ -1,5 +1,5 @@
 from django import forms
-from .models import Store
+from store.models import Store
 
 class StoreCreateForm(forms.ModelForm):
     class Meta:
