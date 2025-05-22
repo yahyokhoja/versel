@@ -25,18 +25,15 @@ def store_detail_view(request, store_id):
 @login_required
 def store_dashboard_view(request):
     try:
-        store = Store.objects.get(owner=request.user)
+        store = Store.objects.get(owner=request.user)  # Получаем магазин текущего пользователя
+        products = Product.objects.filter(store=store)  # Получаем товары, связанные с магазином
     except Store.DoesNotExist:
-        return redirect('create_store')  # Если у пользователя нет магазина, перенаправляем его на создание магазина
-
-    # Получаем все товары магазина
-    products = Product.objects.filter(store=store)
+        return redirect('create_store')  # Если магазина нет, перенаправляем на создание
 
     return render(request, 'store/dashboard.html', {
         'store': store,
         'products': products,
     })
-
 
 # Создание магазина
 @login_required

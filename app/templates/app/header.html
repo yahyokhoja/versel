@@ -19,12 +19,24 @@
             max-height: 300px; /* Максимальная высота для меню */
             overflow-y: auto;  /* Включает вертикальную прокрутку */
         }
+
+        header {
+            padding: 1rem 0; /* Уменьшенные отступы */
+        }
+
+        header h1 {
+            font-size: 1.5rem; /* Уменьшенный размер текста */
+            margin: 0; /* Убираем дополнительные отступы */
+        }
+
+        .navbar {
+            padding: 0.5rem 0; /* Уменьшаем отступы внутри навбара */
+        }
     </style>
 </head>
 <body>
-<header class="bg-primary text-white p-4">
+<header class="bg-primary text-white">
     <div class="container">
-        <h1>Добро пожаловать!</h1>
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <button
@@ -102,9 +114,9 @@
                                 <a class="nav-link" href="{% url 'profile' %}">Личный кабинет</a>
                             </li>
                             <li class="nav-item">
-                                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                                <form action="{% url 'logout' %}" method="post" class="d-inline">
                                     {% csrf_token %}
-                                    <button type="submit" class="nav-link btn btn-link" style="padding: 0; border: none; color: white; text-decoration: none;">Выйти</button>
+                                    <button type="submit" class="nav-link btn btn-link p-0 text-white">Выйти</button>
                                 </form>
                             </li>
                         {% else %}

@@ -29,8 +29,40 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ store.name }}</h5>
                             <p class="card-text">{{ store.description }}</p>
-                            <p class="card-text"><small class="text-muted">Дата создания: {{ store.created_at|date:"d M Y" }}</small></p> <!-- Показываем дату создания -->
+                            <p class="card-text"><small class="text-muted">Дата создания: {{ store.created_at|date:"d M Y" }}</small></p>
                             
+                            <!-- Карусель товаров -->
+                            <div id="carousel{{ store.id }}" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    {% for product in store.products.all %}
+                                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                            {% if product.image %}
+                                                <img src="{{ product.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                                            {% else %}
+                                                <img src="/static/images/default-product.jpg" class="d-block w-100" alt="Изображение отсутствует">
+                                            {% endif %}
+                                            <div class="carousel-caption d-none d-md-block">
+                                                <h5>{% if product.name %}{{ product.name }}{% else %}Название отсутствует{% endif %}</h5>
+                                                <p>{{ product.description }}</p>
+                                                <p><strong>Цена:</strong> {{ product.price }} ₽</p>
+                                            </div>
+                                        </div>
+                                    {% empty %}
+                                        <div class="carousel-item active">
+                                            <p>Товары отсутствуют.</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel{{ store.id }}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Предыдущий</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carousel{{ store.id }}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Следующий</span>
+                                </button>
+                            </div>
+
                             <!-- Кнопка для перехода в магазин -->
                             <a href="{% url 'store_detail' store.id %}" class="btn btn-primary mt-3">Войти в магазин</a>
                         </div>

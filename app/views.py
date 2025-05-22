@@ -2,5 +2,5 @@ from django.shortcuts import render
 from store.models import Store
 
 def index(request):
-    stores = Store.objects.all().order_by('-created_at')  # Сортировка магазинов по дате создания
+    stores = Store.objects.prefetch_related('products').all()  # Загружаем магазины с их товарами
     return render(request, 'app/index.html', {'stores': stores})
