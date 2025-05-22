@@ -1,0 +1,33 @@
+{% extends 'app/header.html' %}
+
+{% block content %}
+<h1>Ваши заказы</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Товар</th>
+            <th>Количество</th>
+            <th>Статус</th>
+            <th>Дата создания</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.product.name }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>{{ order.get_status_display }}</td>
+            <td>{{ order.created_at }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">Нет заказов</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'create-order' product.id %}" class="btn btn-primary">Создать заказ</a>
+
+{% endblock %}

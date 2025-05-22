@@ -2,52 +2,49 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import StoreForm, ProductForm
 from .models import Store, Product
-from django.shortcuts import render, get_object_or_404
-from .models import Product, SubCategory  # убедитесь, что SubCategory у вас есть
 
+
+# Отображение товаров по подкатегории
 def products_by_subcategory(request, subcategory_id):
-    # Предположим, у вас есть модель SubCategory и связь с Product
+    # Предположим, что SubCategory у вас существует и связь с Product работает корректно
     products = Product.objects.filter(subcategory_id=subcategory_id)
     return render(request, 'store/products_by_subcategory.html', {'products': products})
 
 
-
-
-
+# Детали магазина (если магазин существует и не принадлежит текущему пользователю, редиректим)
 def store_detail_view(request, store_id):
-    try:
-        # Получаем магазин по store_id
-        store = get_object_or_404(Store, id=store_id)
-    except Store.DoesNotExist:
-        store = None
+    store = get_object_or_404(Store, id=store_id)
+    
+    if store.owner == request.user:
+        return redirect('store_dashboard')  # Перенаправляем на дашборд магазина, если это ваш магазин
 
-    # Если у пользователя уже есть магазин, перенаправляем его на дашборд
-    if store and store.owner == request.user:
-        return redirect('store_dashboard')  # Редирект на дашборд
+   #
 
-    # Если магазин найден и не принадлежит текущему пользователю
-    return render(request, 'store/store_detail.html', {'store': store})
 
+# Панель управления магазином
 @login_required
 def store_dashboard_view(request):
     try:
         store = Store.objects.get(owner=request.user)
     except Store.DoesNotExist:
-        return redirect('create_store')  # если у пользователя нет магазина
+        return redirect('create_store')  # Если у пользователя нет магазина, перенаправляем его на создание магазина
 
-    # получаем все товары магазина (если есть такая модель)
+    # Получаем все товары магазина
     products = Product.objects.filter(store=store)
 
     return render(request, 'store/dashboard.html', {
         'store': store,
         'products': products,
     })
+
+
+# Создание магазина
 @login_required
 def create_store_view(request):
     try:
-        # Если у пользователя уже есть магазин, отправляем его на дашборд
-        existing_store = Store.objects.get(owner=request.user)
-        return redirect('store_dashboard')
+        # Проверяем, есть ли уже магазин у пользователя
+        existing_store = Store.objects.get(owner=request.users)
+        return redirect('store_dashboard')  # Если магазин уже существует, отправляем на дашборд
     except Store.DoesNotExist:
         pass  # Магазина нет — показываем форму для создания
 
@@ -64,23 +61,24 @@ def create_store_view(request):
     return render(request, 'store/create_store.html', {'form': form})
 
 
+# Добавление товара в магазин
 @login_required
 def add_product_view(request):
-    # Получаем магазин пользователя
     store = get_object_or_404(Store, owner=request.user)
 
     if request.method == 'POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)  # Не забудь request.FILES для загрузки изображений
         if form.is_valid():
             product = form.save(commit=False)
-            product.store = store  # Привязываем продукт к магазину
+            product.store = store
             product.save()
-            return redirect('store_dashboard')  # Перенаправляем в панель магазина
+            return redirect('store_dashboard')
     else:
         form = ProductForm()
-    
+
     return render(request, 'store/add_product.html', {'form': form})
 
+# Редактирование товара
 @login_required
 def edit_product_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -89,12 +87,14 @@ def edit_product_view(request, product_id):
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
             form.save()
-            return redirect('store_dashboard')  # Перенаправляем в панель магазина
+            return redirect('store_dashboard')  # Перенаправляем на панель магазина после редактирования
     else:
         form = ProductForm(instance=product)
-    
+
     return render(request, 'store/edit_product.html', {'form': form, 'product': product})
 
+
+# Редактирование магазина
 @login_required
 def edit_store_view(request, store_id):
     store = get_object_or_404(Store, id=store_id, owner=request.user)
@@ -110,6 +110,7 @@ def edit_store_view(request, store_id):
     return render(request, 'store/edit_store.html', {'form': form, 'store': store})
 
 
+# Список всех магазинов
 def store_list_view(request):
     stores = Store.objects.all().order_by('-created_at')  # Сортировка по дате создания, начиная с новейших
     return render(request, 'app/store_list.html', {'stores': stores})

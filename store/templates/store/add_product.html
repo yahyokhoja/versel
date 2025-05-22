@@ -1,0 +1,32 @@
+{% extends "app/header.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Добавить новый товар</h1>
+
+    <form method="POST" enctype="multipart/form-data" class="mb-4">
+        {% csrf_token %}
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>Пожалуйста, исправьте ошибки в форме:</strong>
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">💾 Сохранить товар</button>
+    </form>
+
+    <a href="{% url 'store_dashboard' %}" class="btn btn-secondary">🔙 Назад в панель управления</a>
+</div>
+{% endblock %}

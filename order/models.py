@@ -1,21 +1,24 @@
-
-
-# Create your models here.
 from django.db import models
-from django.conf import settings
-from django.apps import apps
-from store.models import Store
-
-
-
-
+from store.models import Product
+from users.models import CustomUser  # Импортируем кастомную модель пользователя
 
 class Order(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='orders')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    product_name = models.CharField(max_length=255)
-    quantity = models.PositiveIntegerField()
+    STATUS_CHOICES = (
+        ('pending', 'Ожидает'),
+        ('in_progress', 'В процессе'),
+        ('completed', 'Завершено'),
+    )
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.product_name} (x{self.quantity})"
+        return f"Order #{self.id} - {self.product.name}"
+
+    class Meta:
+        verbose_name = 'Order'
+        verbose_name_plural = 'Orders'
