@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import StoreForm, ProductForm
+from .forms import StoreForm, ProductForm, SubCategoryForm
 from .models import Store, Product
 
 
@@ -43,7 +43,7 @@ def store_dashboard_view(request):
 def create_store_view(request):
     try:
         # Проверяем, есть ли уже магазин у пользователя
-        existing_store = Store.objects.get(owner=request.users)
+        existing_store = Store.objects.get(owner=request.user)
         return redirect('store_dashboard')  # Если магазин уже существует, отправляем на дашборд
     except Store.DoesNotExist:
         pass  # Магазина нет — показываем форму для создания
@@ -114,3 +114,16 @@ def edit_store_view(request, store_id):
 def store_list_view(request):
     stores = Store.objects.all().order_by('-created_at')  # Сортировка по дате создания, начиная с новейших
     return render(request, 'app/store_list.html', {'stores': stores})
+
+
+@login_required
+def add_subcategory_view(request):
+    if request.method == 'POST':
+        form = SubCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('store_dashboard')  # Перенаправление после успешного добавления
+    else:
+        form = SubCategoryForm()
+
+    return render(request, 'store/add_subcategory.html', {'form': form})
