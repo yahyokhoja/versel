@@ -29,10 +29,10 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ store.name }}</h5>
                             <p class="card-text">{{ store.description }}</p>
+                            <p class="card-text"><small class="text-muted">Дата создания: {{ store.created_at|date:"d M Y" }}</small></p> <!-- Показываем дату создания -->
                             
                             <!-- Кнопка для перехода в магазин -->
                             <a href="{% url 'store_detail' store.id %}" class="btn btn-primary mt-3">Войти в магазин</a>
-
                         </div>
                     </div>
                 </div>

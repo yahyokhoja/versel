@@ -108,3 +108,8 @@ def edit_store_view(request, store_id):
         form = StoreForm(instance=store)
 
     return render(request, 'store/edit_store.html', {'form': form, 'store': store})
+
+
+def store_list_view(request):
+    stores = Store.objects.all().order_by('-created_at')  # Сортировка по дате создания, начиная с новейших
+    return render(request, 'app/store_list.html', {'stores': stores})
