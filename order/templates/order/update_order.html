@@ -1,0 +1,16 @@
+<!-- filepath: /home/yahyo/frontendversel/versel/order/templates/order/update_order.html -->
+{% extends 'app/header.html' %}
+
+{% block title %}Изменение заказа{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Изменение заказа</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Сохранить изменения</button>
+        <a href="{% url 'order-list' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}
