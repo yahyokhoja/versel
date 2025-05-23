@@ -24,16 +24,23 @@ def register_view(request):
     else:
         form = CustomUserCreationForm()
 
-    return render(request, 'user/register.html', {'form': form})
+    return render(request, 'users/register.html', {'form': form})
 
 
 
 @login_required
 def profile_view(request):
     store = getattr(request.user, 'store', None)  # Получаем магазин, если есть
-    return render(request, 'user/profile.html', {'store': store})
+    return render(request, 'users/profile.html', {'store': store})
 
 
 def logout_view(request):
     logout(request)
     return redirect('home')  # или куда нужно
+
+@login_required
+def customer_dashboard(request):
+    if request.user.role == 'customer':  # Убедитесь, что пользователь — покупатель
+        return render(request, 'users/customer_dashboard.html', {})
+    else:
+        return render(request, '403.html', status=403)  # Возвращаем ошибку доступа

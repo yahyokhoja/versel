@@ -1,0 +1,19 @@
+<!-- filepath: /home/yahyo/frontendversel/versel/order/templates/order/create_order.html -->
+{% extends 'app/header.html' %}
+
+{% load static %}
+
+{% block title %}Создание заказа{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Оформление заказа</h2>
+    <p><strong>Товар:</strong> {{ product.name }}</p>
+    <p><strong>Цена:</strong> {{ product.price }} ₽</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ order_form.as_p }}
+        <button type="submit" class="btn btn-success">Подтвердить заказ</button>
+    </form>
+</div>
+{% endblock %}

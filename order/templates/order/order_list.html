@@ -10,6 +10,7 @@
             <th>Количество</th>
             <th>Статус</th>
             <th>Дата создания</th>
+            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
@@ -19,10 +20,20 @@
             <td>{{ order.quantity }}</td>
             <td>{{ order.get_status_display }}</td>
             <td>{{ order.created_at }}</td>
+            <td>
+                <!-- Кнопка для изменения заказа -->
+                <a href="{% url 'update-order' order.id %}" class="btn btn-warning btn-sm">Изменить</a>
+
+                <!-- Кнопка для удаления заказа -->
+                <form action="{% url 'delete-order' order.id %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                </form>
+            </td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="4">Нет заказов</td>
+            <td colspan="5">Нет заказов</td>
         </tr>
         {% endfor %}
     </tbody>

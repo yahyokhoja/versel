@@ -13,13 +13,15 @@ def products_by_subcategory(request, subcategory_id):
 
 # Детали магазина (если магазин существует и не принадлежит текущему пользователю, редиректим)
 def store_detail_view(request, store_id):
+    # Получаем магазин по ID или возвращаем 404, если он не найден
     store = get_object_or_404(Store, id=store_id)
     
+    # Если магазин принадлежит текущему пользователю, перенаправляем на дашборд
     if store.owner == request.user:
-        return redirect('store_dashboard')  # Перенаправляем на дашборд магазина, если это ваш магазин
+        return redirect('store_dashboard')  # Перенаправляем на панель управления магазина
 
-   #
-
+    # Если магазин не принадлежит текущему пользователю, отображаем детали магазина
+    return render(request, 'store/store_detail.html', {'store': store})
 
 # Панель управления магазином
 @login_required

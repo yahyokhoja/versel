@@ -1,16 +1,41 @@
+
+
 {% extends 'app/header.html' %}
 
-{% block content %}
-  <h2>Магазин: {{ store.name }}</h2>
-  <p>{{ store.description }}</p>
-  <p>Владелец: {{ store.owner }}</p>
 
-  <h3>Товары</h3>
-  <ul>
-    {% for product in store.products.all %}
-      <li>{{ product.name }} - {{ product.price }} </li>
-    {% empty %}
-      <li>Нет товаров в магазине.</li>
-    {% endfor %}
-  </ul>
+{% load static %}
+
+{% block title %}Магазин: {{ store.name }}{% endblock %}
+
+
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Магазин: {{ store.name }}</h2>
+    <p>{{ store.description }}</p>
+    <p><strong>Владелец:</strong> {{ store.owner }}</p>
+
+    <h3 class="mt-5">Товары</h3>
+    <div class="row">
+        {% for product in store.products.all %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="/static/images/default-product.jpg" class="card-img-top" alt="Изображение отсутствует">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+                        <p><strong>Цена:</strong> {{ product.price }} ₽</p>
+                        <a href="{% url 'order_product' product.id %}" class="btn btn-primary">Купить</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Нет товаров в магазине.</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

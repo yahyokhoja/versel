@@ -3,6 +3,9 @@ from django.urls import path
 from . import views  # Импортируем views из текущего приложения store
 from django.conf import settings
 from django.conf.urls.static import static
+from order.views import create_order  # Импортируем представление из приложения order
+
+
 
 urlpatterns = [
     path('subcategory/<int:subcategory_id>/', views.products_by_subcategory, name='products_by_subcategory'),
@@ -13,6 +16,9 @@ urlpatterns = [
      path('delete-product/<int:product_id>/', views.delete_product_view, name='delete_product'),
     path('edit-product/<int:product_id>/', views.edit_product_view, name='edit_product'),
     path('edit-store/<int:store_id>/', views.edit_store_view, name='edit_store'),
+    
+     path('order/<int:product_id>/', create_order, name='order_product'),
+
 ]
 
 # Обслуживаем медиа-файлы в процессе разработки
