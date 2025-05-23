@@ -124,3 +124,11 @@ def add_subcategory_view(request):
         form = SubCategoryForm()
 
     return render(request, 'store/add_subcategory.html', {'form': form})
+
+
+
+def delete_product_view(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if request.method == 'POST':
+        product.delete()
+        return redirect('store_dashboard')  # Перенаправление после удаления

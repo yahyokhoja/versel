@@ -10,7 +10,7 @@ urlpatterns = [
     path('create-store/', views.create_store_view, name='create_store'),
     path('store-dashboard/', views.store_dashboard_view, name='store_dashboard'),
     path('add-product/', views.add_product_view, name='add_product'),
-   
+     path('delete-product/<int:product_id>/', views.delete_product_view, name='delete_product'),
     path('edit-product/<int:product_id>/', views.edit_product_view, name='edit_product'),
     path('edit-store/<int:store_id>/', views.edit_store_view, name='edit_store'),
 ]
