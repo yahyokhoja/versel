@@ -3,6 +3,9 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from order.models import Order
+from cart.models import CartItem  # Предполагается, что у вас есть модель CartItem
+
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -26,12 +29,17 @@ def register_view(request):
 
     return render(request, 'users/register.html', {'form': form})
 
-
-
 @login_required
 def profile_view(request):
     store = getattr(request.user, 'store', None)  # Получаем магазин, если есть
-    return render(request, 'users/profile.html', {'store': store})
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')  # Получаем заказы пользователя
+    cart_items = CartItem.objects.filter(user=request.user)  # Получаем товары из корзины пользователя
+
+    return render(request, 'users/profile.html', {
+        'store': store,
+        'orders': orders,
+        'cart_items': cart_items,
+    })
 
 
 def logout_view(request):

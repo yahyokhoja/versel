@@ -29,8 +29,6 @@ def create_order(request, product_id):
         'product': product,
         'order': order  # Передаем объект заказа (может быть None)
     })
-
-
 @login_required
 def update_order(request, order_id):
     # Получаем заказ текущего пользователя или возвращаем 404
@@ -38,13 +36,19 @@ def update_order(request, order_id):
     if request.method == 'POST':
         form = OrderForm(request.POST, instance=order)
         if form.is_valid():
-            # Сохраняем изменения
-            form.save()
+            # Сохраняем изменения в заказе
+            order = form.save(commit=False)
+            # Обновляем статус, если он передан в POST-запросе
+            new_status = request.POST.get('status')
+            if new_status:
+                order.status = new_status
+            order.save()
             return redirect('order-list')  # Перенаправление на список заказов
     else:
         # Инициализируем форму с текущими данными заказа
         form = OrderForm(instance=order)
     return render(request, 'order/update_order.html', {'form': form, 'order': order})
+
 
 @login_required
 def delete_order(request, order_id):
@@ -55,3 +59,14 @@ def delete_order(request, order_id):
         order.delete()
         return redirect('order-list')  # Перенаправление на список заказов
     return render(request, 'order/delete_order.html', {'order': order})
+
+@login_required
+def update_status(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status:
+            order.status = new_status
+            order.save()
+            return redirect('order-list')  # Перенаправление на список заказов
+    return render(request, 'order/update_status.html', {'order': order})

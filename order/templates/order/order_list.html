@@ -25,14 +25,18 @@
             <td>{{ order.created_at }}</td>
             <td>{{ order.user.get_full_name }}</td> <!-- Имя заказчика -->
             <td>
-                <!-- Кнопка для изменения заказа -->
-                <a href="{% url 'update-order' order.id %}" class="btn btn-warning btn-sm">Изменить</a>
+                {% if order.status != 'completed' %}
+                    <!-- Кнопка для изменения заказа -->
+                    <a href="{% url 'update-order' order.id %}" class="btn btn-warning btn-sm">Изменить</a>
 
-                <!-- Кнопка для удаления заказа -->
-                <form action="{% url 'delete-order' order.id %}" method="post" class="d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
-                </form>
+                    <!-- Кнопка для удаления заказа -->
+                    <form action="{% url 'delete-order' order.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                    </form>
+                {% else %}
+                    <span class="text-muted">Действия недоступны</span>
+                {% endif %}
             </td>
         </tr>
         {% empty %}

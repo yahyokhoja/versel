@@ -9,6 +9,17 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+
+        <!-- Поле для изменения статуса -->
+        <div class="mb-3">
+            <label for="status" class="form-label">Новый статус</label>
+            <select id="status" name="status" class="form-select">
+                <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>В ожидании</option>
+                <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Завершен</option>
+                <option value="canceled" {% if order.status == 'canceled' %}selected{% endif %}>Отменен</option>
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-success">Сохранить изменения</button>
         <a href="{% url 'order-list' %}" class="btn btn-secondary">Отмена</a>
     </form>
