@@ -7,8 +7,16 @@ from store.models import Product  # Импортируем модель Product
 @login_required
 def order_list(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    product = Product.objects.first()  # Пример: выбираем первый продукт
+    for order in orders:
+        order.total_price = order.quantity * order.product.price  # Рассчитываем общую стоимость
+
+    # Получаем первый продукт для примера (или настройте логику по вашему усмотрению)
+    product = Product.objects.first()
+
     return render(request, 'order/order_list.html', {'orders': orders, 'product': product})
+
+
+
 
 @login_required
 def create_order(request, product_id):
