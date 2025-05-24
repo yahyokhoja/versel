@@ -16,27 +16,27 @@ def order_list(request):
     return render(request, 'order/order_list.html', {'orders': orders, 'product': product})
 
 
-
-
 @login_required
 def create_order(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    order = None  # Инициализируем переменную для передачи в шаблон
+    store = product.store  # Получаем магазин, к которому принадлежит товар
     if request.method == 'POST':
-        order_form = OrderForm(request.POST)
-        if order_form.is_valid():
-            order = order_form.save(commit=False)
+        form = OrderForm(request.POST, store=store)  # Передаем магазин в форму
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.product = product
             order.user = request.user
             order.save()
-            return redirect('order-list')  # Перенаправляем на список заказов
+            return redirect('order_success')  # Перенаправление после успешного заказа
     else:
-        order_form = OrderForm(initial={'product': product})
+        form = OrderForm(store=store)  # Передаем магазин в форму
 
     return render(request, 'order/create_order.html', {
-        'order_form': order_form,
         'product': product,
-        'order': order  # Передаем объект заказа (может быть None)
+        'order_form': form,
     })
+
+
 @login_required
 def update_order(request, order_id):
     # Получаем заказ текущего пользователя или возвращаем 404

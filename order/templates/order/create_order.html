@@ -8,6 +8,7 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Оформление заказа</h2>
+    <p><strong>Магазин:</strong> {{ product.store.name }}</p> <!-- Отображение названия магазина -->
     <p><strong>Товар:</strong> {{ product.name }}</p>
     <p><strong>Цена:</strong> {{ product.price }} ₽</p>
     <form method="post">
