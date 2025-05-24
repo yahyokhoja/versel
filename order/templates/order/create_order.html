@@ -10,7 +10,7 @@
     <h2>Оформление заказа</h2>
     <p><strong>Магазин:</strong> {{ product.store.name }}</p> <!-- Отображение названия магазина -->
     <p><strong>Товар:</strong> {{ product.name }}</p>
-    <p><strong>Цена:</strong> {{ product.price }} ₽</p>
+    <p><strong>Цена:</strong> {{ product.price }} сомони</p>
     <form method="post">
         {% csrf_token %}
         {{ order_form.as_p }}
