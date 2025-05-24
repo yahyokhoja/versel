@@ -8,4 +8,5 @@ urlpatterns = [
     path('', views.index, name='index'),  # Главная страница из app.views
     path('create-store/', create_store_view, name='create_store'),  # Перенаправление на создание магазина
     path('store-dashboard/', store_dashboard_view, name='store_dashboard'),  # Перенаправление на дашборд магазина
+    path('about/', views.about_view, name='about'),
 ]

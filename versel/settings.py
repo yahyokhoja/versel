@@ -37,7 +37,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+    'django.middleware.locale.LocaleMiddleware',  # Убедитесь, что это middleware включено
 ]
 
 ROOT_URLCONF = 'versel.urls'
@@ -79,6 +79,17 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
+
+
+LANGUAGES = [
+    ('ru', 'Русский'),
+    ('tg', 'Таджикский'),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',  # Папка для хранения переводов
+]
+
 
 # Локализация
 LANGUAGE_CODE = 'ru'
