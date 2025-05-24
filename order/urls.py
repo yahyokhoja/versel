@@ -8,5 +8,5 @@ urlpatterns = [
     path('delete/<int:order_id>/', views.delete_order, name='delete-order'),
     path('edit/<int:order_id>/', views.update_order, name='edit_order'),  # Редактирование заказа
     path('update-status/<int:order_id>/', views.update_status, name='update_status'),  # Редактирование статуса
-    
+    path('success/', views.order_success, name='order_success'),  # Добавляем маршрут для успешного заказа
 ]

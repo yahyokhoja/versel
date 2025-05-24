@@ -1,0 +1,12 @@
+<!-- filepath: /home/yahyo/frontendversel/versel/order/templates/order/order_success.html -->
+{% extends 'app/header.html' %}
+
+{% block title %}Заказ успешно оформлен{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Ваш заказ успешно оформлен!</h2>
+    <p>Спасибо за ваш заказ. Мы свяжемся с вами в ближайшее время.</p>
+    <a href="{% url 'profile' %}" class="btn btn-primary">Вернуться в профиль</a>
+</div>
+{% endblock %}

@@ -78,3 +78,10 @@ def update_status(request, order_id):
             order.save()
             return redirect('order-list')  # Перенаправление на список заказов
     return render(request, 'order/update_status.html', {'order': order})
+
+
+@login_required
+def order_success(request):
+    return render(request, 'order/order_success.html', {
+        'message': 'Ваш заказ успешно оформлен!',
+    })
