@@ -94,7 +94,7 @@ LOCALE_PATHS = [
 # Локализация
 LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'UTC'
-USE_I18N = True
+USE_I10N = True
 USE_TZ = True
 
 # Статика
