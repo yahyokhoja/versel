@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Чат с FoodBot с подсказками из YAML</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f9f9f9;
+    }
+    #chat-box {
+      border: 1px solid #ccc;
+      background: #fff;
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .message {
+      margin-bottom: 15px;
+    }
+    .message.user {
+      text-align: right;
+      color: #00529b;
+    }
+    .message.bot {
+      text-align: left;
+      color: #4f4f4f;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #suggestions {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding: 5px;
+      font-size: 14px;
+    }
+    #suggestions div {
+      padding: 5px;
+      cursor: pointer;
+    }
+    #suggestions div:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Чат с FoodBot</h1>
+
+  <div id="chat-box"></div>
+
+  <div id="suggestions"></div>
+
+  <form id="chat-form" method="POST" action="/">
+    <input type="text" name="message" id="message" placeholder="Введите сообщение..." autocomplete="off" required />
+    <button type="submit">Отправить</button>
+  </form>
+
+  <!-- Подключаем js-yaml для парсинга YAML -->
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script>
+    // Вставь сюда свой YAML как строку
+    const yamlText = `
+categories:
+  - Фармоиши хӯрок
+  - Общее
+
+conversations:
+  - - Ман мехоҳам хӯрок заказ кунам.
+    - Албатта, ки метавонем! Чӣ хӯрок мехоҳед?
+
+  - - Ман пицца мехоҳам.
+    - Пицца! Ба кадом намуди пицца бештар хурсанд мешавед?
+
+  - - Ман пиццаи маргарита мехоҳам.
+    - Пиццаи маргарита! Ин як интихоби аъло аст. Хоҳед, ки ман онро барои шумо фармоиш диҳам?
+
+  - - Ҳа, ман мехоҳам.
+    - Хуб, ман фармоиши пиццаи маргарита барои шумо месозам. Лутфан, маълумоти таҳвилро диҳед.
+
+  - - Ман мехоҳам, ки онро ба ман дар хона расонанд.
+    - Лутфан, суроғаи таҳвилро ба ман диҳед.
+
+  - - Ман дар кӯчаи Сомон 12 зиндагӣ мекунам.
+    - Суроғаи таҳвилро гирифтам. Фармоиши пиццаи маргарита барои таҳвил ба кӯчаи Сомон 12 сабт шуд. Оё шумо ягон чиз дигар мехоҳед фармоиш диҳед?
+
+  - - Не, ман танҳо пицца мехоҳам.
+    - Хуб, ман фармоиши пиццаи маргарита барои таҳвил ба кӯчаи Сомон 12 сабт кардам. Оё шумо ягон чиз дигар мехоҳед?
+
+  - - Ҳа, ман мехоҳам, ки ман як салат низ фармоиш диҳам.
+    - Хуб, ман салат низ фармоиш медиҳам. Кадом намуди салат мехоҳед?
+
+  - - Ман салати цезар мехоҳам.
+    - Салати цезар! Ин як интихоби аъло аст. мехоҳед, ки ман онро барои шумо фармоиш диҳам?
+
+  - - Ҳа, ман мехоҳам.
+    - Хуб, ман фармоиши салати цезар барои шумо месозам. Лутфан, маълумоти таҳвилро диҳед.
+
+  - - Ман мехоҳам, ки онро ба ман дар хона расонанд.
+    - Лутфан, суроғаи таҳвилро ба ман диҳед.
+
+  - - Ман дар кӯчаи Сомон 12 зиндагӣ мекунам.
+    - Суроғаи таҳвилро гирифтам. Фармоиши салати цезар барои таҳвил ба кӯчаи Сомон 12 сабт шуд. Оё шумо ягон чиз дигар мехоҳед фармоиш диҳед?
+
+  - - Не, ман танҳо салат мехоҳам.
+    - Хуб, ман фармоиши салати цезар барои таҳвил ба кӯчаи Сомон 12 сабт кардам. Оё шумо ягон чиз дигар мехоҳед?
+
+  - - Ҳа, ман мехоҳам, ки ман як нӯшокӣ низ фармоиш диҳам.
+    - Хуб, ман нӯшокӣ низ фармоиш медиҳам. Кадом намуди нӯшокӣ мехоҳед?
+
+  - - Ман як кока-кола мехоҳам.
+    - Кока-кола! Ин як интихоби аъло аст. Хоҳед, ки ман онро барои шумо фармоиш диҳам?
+
+  - - Ҳа, ман мехоҳам.
+    - Хуб, ман фармоиши кока-кола барои шумо месозам. Лутфан, маълумоти таҳвилро диҳед.
+
+  - - Ман мехоҳам, ки онро ба ман дар хона расонанд.
+    - Лутфан, суроғаи таҳвилро ба ман диҳед.
+
+  - - Ман дар кӯчаи Сомон 12 зиндагӣ мекунам.
+    - Суроғаи таҳвилро гирифтам. Фармоиши кока-кола барои таҳвил ба кӯчаи Сомон 12 сабт шуд. Оё шумо ягон чиз дигар мехоҳед фармоиш диҳед?
+
+  - - Не, ман танҳо нӯшокӣ мехоҳам.
+    - Хуб, ман фармоиши кока-кола барои таҳвил ба кӯчаи Сомон 12 сабт кардам. Оё шумо ягон чиз дигар мехоҳед?
+
+  - - Ҳа, ман мехоҳам, ки ман як десерт низ фармоиш диҳам.
+    - Хуб, ман десерт низ фармоиш медиҳам. Кадом намуди десерт мехоҳед?
+
+  - - Шашлик.
+    - Шашлик! Ин як интихоби аъло аст. Хоҳед, ки ман онро барои шумо фармоиш диҳам?
+
+  - - Ҳа, ман мехоҳам.
+    - Хуб, ман фармоиши шашлик барои шумо месозам. Лутфан, чанд дона ва аз кадом намуд маълумот диҳед.
+
+  - - Ман мехоҳам, ки онро ба ман дар хона расонанд.
+    - Лутфан, суроғаи таҳвилро ба ман диҳед.
+
+  - - Ман дар кӯчаи Сомон 12 зиндагӣ мекунам.
+    - Суроғаи таҳвилро гирифтам. Фармоиши шашлик барои таҳвил ба кӯчаи Сомон 12 сабт шуд. Оё шумо ягон чиз дигар мехоҳед фармоиш диҳед?
+
+  - - Не, ман танҳо десерт мехоҳам.
+    - Хуб, ман фармоиши шашликро сабт кардам. Ташаккур!
+
+  - - Чӣ доред
+    - Хуб, шашлиик ва пицца дорем. Кадомашро мехоҳед?
+
+  - - Ман мехоҳам, ки  шашлик фармоиш диҳам.
+    - Лутфан, чанд дона ва аз кадом намуд маълумот диҳед.
+
+  - - бале
+    - Чӣ фармоиш медиҳед?
+
+  - - мехоҳам
+    - Лутфан, маълумоти бештар диҳед.
+
+  - - "*"
+    - Ман кӯмак карда метавонам, ки фармоиши хӯрок диҳед. Барои кӯмак дар дигар мавзӯъҳо, ман наметавонам кӯмак кунам. 
+`;
+
+    // Разбираем YAML в объект
+    const data = jsyaml.load(yamlText);
+
+    // Создаем карту из вопрос => ответ для быстрого поиска
+    const convoMap = new Map();
+    data.conversations.forEach(pair => {
+      const question = pair[0].toLowerCase();
+      const answer = pair[1];
+      convoMap.set(question, answer);
+    });
+
+    const chatBox = document.getElementById('chat-box');
+    const suggestionsBox = document.getElementById('suggestions');
+    const form = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message');
+
+    // Функция добавить сообщение в чат
+    function addMessage(sender, text) {
+      const div = document.createElement('div');
+      div.classList.add('message', sender);
+      div.textContent = (sender === 'user' ? 'Вы: ' : 'Бот: ') + text;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Показать подсказки — пользовательские вопросы из YAML
+    function showSuggestions() {
+      suggestionsBox.innerHTML = '';
+      // Отобразим первые 10 подсказок (вопросов)
+      const questions = Array.from(convoMap.keys()).slice(0, 30);
+      questions.forEach(q => {
+        const div = document.createElement('div');
+        div.textContent = q;
+        div.title = "Нажмите, чтобы вставить в поле ввода";
+        div.addEventListener('click', () => {
+          messageInput.value = q;
+          messageInput.focus();
+        });
+        suggestionsBox.appendChild(div);
+      });
+    }
+
+    showSuggestions();
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const userText = messageInput.value.trim();
+      if (!userText) return;
+
+      addMessage('user', userText);
+
+      const userLower = userText.toLowerCase();
+
+      // Ищем точное совпадение
+      let botResponse = convoMap.get(userLower);
+
+      // Если ответа нет, показываем дефолт на английском с таджикским переводом
+      if (!botResponse) {
+        botResponse = "Sorry, I can only help with food orders. / Бубахшед, ман танҳо дар фармоиши хӯрок кӯмак карда метавонам.";
+      }
+
+      // Показать ответ
+      addMessage('bot', botResponse);
+
+      messageInput.value = '';
+      messageInput.focus();
+    });
+  </script>
+</body>
+</html>

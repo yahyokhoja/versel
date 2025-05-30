@@ -25,6 +25,8 @@ INSTALLED_APPS = [
     'order',
     'store',
      'cart',
+     'bot',
+    
 ]
 
 # Middleware
